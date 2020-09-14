@@ -41,7 +41,7 @@ function createCards() {
 function createCard(data, index) {
   const card = document.createElement("div");
   card.classList.add("card");
-
+  // if the 0 index, is the card that will appear on the DOM by default
   if (index === 0) {
     card.classList.add("active");
   }
@@ -56,7 +56,46 @@ function createCard(data, index) {
   </div>
  </div>
   `;
-
+  // it changes from question to answer on the CSS
+  card.addEventListener("click", () => card.classList.toggle("show-answer"));
+  // Pushes it to cardsEl
+  cardsEl.push(card);
+  // adds it to the DOM (after calling this function elsewhere)
   cardsContainer.appendChild(card);
+
+  updateCurrentText();
 }
 
+// updates the text on the pagination.
+function updateCurrentText() {
+  currentEl.innerText = `${currentActiveCard + 1}/${cardsEl.length}`;
+}
+
+createCards();
+
+//add event listeners.
+nextBtn.addEventListener("click", () => {
+  cardsEl[currentActiveCard].className = "card left";
+
+  currentActiveCard = currentActiveCard + 1;
+
+  if (currentActiveCard > cardsEl.length - 1) {
+    currentActiveCard = cardsEl.length - 1;
+  }
+
+  cardsEl[currentActiveCard].className = "card active";
+  updateCurrentText();
+});
+
+prevBtn.addEventListener("click", () => {
+  cardsEl[currentActiveCard].className = "card right";
+
+  currentActiveCard = currentActiveCard - 1;
+
+  if (currentActiveCard < 0) {
+    currentActiveCard = 0;
+  }
+
+  cardsEl[currentActiveCard].className = "card active";
+  updateCurrentText();
+});
